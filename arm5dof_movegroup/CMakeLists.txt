@@ -14,6 +14,7 @@ find_package(moveit_visual_tools REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(arm5dof_target_detect REQUIRED)
 find_package(geometry_msgs)
 
 include_directories(
@@ -21,8 +22,8 @@ include_directories(
 )
 
 # 颜色识别节点
-add_executable(color_node src/color_detect.cpp)
-add_executable(move_group src/move_group.cpp)
+add_executable(color_node src/color_detect.cpp src/color_detect_main.cpp)
+add_executable(move_group src/move_group.cpp src/move_group_main.cpp)
 
 ament_target_dependencies(color_node
   ament_cmake
@@ -30,6 +31,7 @@ ament_target_dependencies(color_node
   moveit_ros_planning_interface
   moveit_visual_tools
   rclcpp_action
+  arm5dof_target_detect
   geometry_msgs
 )
 
@@ -39,6 +41,7 @@ ament_target_dependencies(move_group
   moveit_ros_planning_interface
   moveit_visual_tools
   rclcpp_action
+  arm5dof_target_detect
   geometry_msgs
 )
 

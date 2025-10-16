@@ -1,0 +1,3 @@
+geometry_msgs/Point red_target_point
+geometry_msgs/Point blue_target_point
+geometry_msgs/Point green_target_point
