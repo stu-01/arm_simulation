@@ -16,6 +16,7 @@ find_package(rclcpp_action REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(arm5dof_target_detect REQUIRED)
 find_package(geometry_msgs)
+find_package(cv_bridge REQUIRED)
 
 include_directories(
   ${OpenCV_INCLUDE_DIRS}
@@ -33,6 +34,7 @@ ament_target_dependencies(color_node
   rclcpp_action
   arm5dof_target_detect
   geometry_msgs
+  cv_bridge
 )
 
 ament_target_dependencies(move_group
@@ -43,6 +45,7 @@ ament_target_dependencies(move_group
   rclcpp_action
   arm5dof_target_detect
   geometry_msgs
+  cv_bridge
 )
 
 target_link_libraries(color_node ${OpenCV_LIBRARIES})
