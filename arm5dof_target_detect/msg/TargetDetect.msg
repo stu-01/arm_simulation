@@ -1,3 +1,4 @@
-geometry_msgs/Point red_target_point
-geometry_msgs/Point blue_target_point
-geometry_msgs/Point green_target_point
+geometry_msgs/PointStamped final_position_red1
+geometry_msgs/PointStamped final_position_red2
+geometry_msgs/PointStamped final_position_blue
+geometry_msgs/PointStamped final_position_green
