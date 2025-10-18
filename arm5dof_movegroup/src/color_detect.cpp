@@ -1,4 +1,5 @@
 #include "../include/arm5dof_movegroup/color_detect.hpp"
+#include <opencv2/core.hpp>
 #include <opencv2/core/mat.hpp>
 
 // 再创建订阅者，订阅camera_info，
@@ -7,10 +8,8 @@
 // 在image_callback调用该函数，转换成ROS2信息
 // 由publisher发布
 
-cv::Point detectColor(const cv::Mat &hsv, cv::Mat &output,
-                      const ColorRange &colorRange) {
-  cv::Mat mask;
-  inRange(hsv, colorRange.lower, colorRange.upper, mask);
+cv::Point detectColor(cv::Mat &output, const cv::Mat mask, cv::Scalar drawColor,
+                      std::string name) {
 
   GaussianBlur(mask, mask, cv::Size(5, 5), 0);
 
@@ -38,12 +37,12 @@ cv::Point detectColor(const cv::Mat &hsv, cv::Mat &output,
         cv::Point centroid_out = cv::Point(cx, cy);
 
         cv::Rect rect = boundingRect(contours[i]);
-        rectangle(output, rect, colorRange.drawColor, 2);
-        putText(output, colorRange.name, cv::Point(rect.x, rect.y - 5),
-                cv::FONT_HERSHEY_SIMPLEX, 0.6, colorRange.drawColor, 2);
+        rectangle(output, rect, drawColor, 2);
+        putText(output, name, cv::Point(rect.x, rect.y - 5),
+                cv::FONT_HERSHEY_SIMPLEX, 0.6, drawColor, 2);
 
         // 绘制质心点
-        cv::circle(output, centroid_out, 5, colorRange.drawColor, -1);
+        cv::circle(output, centroid_out, 5, drawColor, -1);
       }
     }
   }
@@ -133,7 +132,7 @@ geometry_msgs::msg::PointStamped ColorNode::final_position(cv::Point &centroid,
   camera_point.point.y = Y_c;
   camera_point.point.z = Z_c;
 
-   return camera_point;
+  return camera_point;
 }
 
 void ColorNode::image_callback(
@@ -144,36 +143,37 @@ void ColorNode::image_callback(
   cv::Mat hsv;
   cv::Mat output = frame.clone();
   cvtColor(frame, hsv, cv::COLOR_BGR2HSV);
-  std::vector<ColorRange> colorRanges = {
-      // 红色有两个范围
-      {cv::Scalar(0, 120, 70), cv::Scalar(10, 255, 255), "Red",
-       cv::Scalar(0, 0, 255)},
-      {cv::Scalar(0, 120, 70), cv::Scalar(10, 255, 255), "Red",
-       cv::Scalar(0, 0, 255)},
-      // 蓝色
-      {cv::Scalar(100, 150, 70), cv::Scalar(130, 255, 255), "Blue",
-       cv::Scalar(255, 0, 0)},
-      // 绿色
-      {cv::Scalar(40, 70, 70), cv::Scalar(80, 255, 255), "Green",
-       cv::Scalar(0, 255, 0)}};
-  this->centroid_out_red1 = detectColor(hsv, output, colorRanges[0]);
-  this->centroid_out_red2 = detectColor(hsv, output, colorRanges[1]);
-  this->centroid_out_blue = detectColor(hsv, output, colorRanges[2]);
-  this->centroid_out_green = detectColor(hsv, output, colorRanges[3]);
 
-  this->depth_red1 =
-      get_depth(this->centroid_out_red1, this->latest_depth_image_);
-  this->depth_red2 =
-      get_depth(this->centroid_out_red2, this->latest_depth_image_);
+  cv::Mat mask_red1;
+  cv::Mat mask_red2;
+  cv::Mat mask_blue;
+  cv::Mat mask_green;
+  cv::inRange(hsv, cv::Scalar(0, 120, 70), cv::Scalar(10, 255, 255), mask_red1);
+  cv::inRange(hsv, cv::Scalar(170, 120, 70), cv::Scalar(180, 255, 255),
+              mask_red2);
+  cv::inRange(hsv, cv::Scalar(100, 150, 70), cv::Scalar(130, 255, 255),
+              mask_blue);
+  cv::inRange(hsv, cv::Scalar(40, 70, 70), cv::Scalar(80, 255, 255),
+              mask_green);
+  cv::Mat mask_red;
+  cv::bitwise_or(mask_red1, mask_red2, mask_red);
+
+  this->centroid_out_red =
+      detectColor(output, mask_red, cv::Scalar(0, 0, 255), "Red");
+  this->centroid_out_blue =
+      detectColor(output, mask_blue, cv::Scalar(255, 0, 0), "Blue");
+  this->centroid_out_green =
+      detectColor(output, mask_green, cv::Scalar(0, 255, 0), "Green");
+
+  this->depth_red =
+      get_depth(this->centroid_out_red, this->latest_depth_image_);
   this->depth_blue =
       get_depth(this->centroid_out_blue, this->latest_depth_image_);
   this->depth_green =
       get_depth(this->centroid_out_green, this->latest_depth_image_);
 
-  this->final_position_red1 =
-      final_position(this->centroid_out_red1, this->depth_red1);
-  this->final_position_red2 =
-      final_position(this->centroid_out_red2, this->depth_red2);
+  this->final_position_red =
+      final_position(this->centroid_out_red, this->depth_red);
   this->final_position_blue =
       final_position(this->centroid_out_blue, this->depth_blue);
   this->final_position_green =
@@ -205,15 +205,13 @@ void ColorNode::depth_callback(
 
 void ColorNode::timer_callback() {
   arm5dof_target_detect::msg::TargetDetect msg;
-  msg.final_position_red1 = this->final_position_red1;
-  msg.final_position_red2 = this->final_position_red2; 
+  msg.final_position_red = this->final_position_red;
   msg.final_position_blue = this->final_position_blue;
   msg.final_position_green = this->final_position_green;
   publisher_->publish(msg);
 }
 
-ColorNode::ColorNode()
-    : Node("detect_node") {
+ColorNode::ColorNode() : Node("detect_node") {
 
   image_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>(
       "camera/image_raw", 10,

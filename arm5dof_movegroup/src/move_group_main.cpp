@@ -1,49 +1,63 @@
-#include <rclcpp/rclcpp.hpp>
-#include <moveit/move_group_interface/move_group_interface.h>
-#include <moveit/planning_scene_interface/planning_scene_interface.h>
+#include "../include/arm5dof_movegroup/move_group.hpp"
+#include <geometry_msgs/msg/detail/point__struct.hpp>
 
-int main(int argc,char** argv)
-{
-    rclcpp::init(argc,argv);
+int main(int argc, char **argv) {
+  rclcpp::init(argc, argv);
 
-    auto node = rclcpp::Node::make_shared("first_plan",
-        rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true));
+  auto node = std::make_shared<MoveNode>();
 
-    auto const logger = rclcpp::get_logger("first_plan");
+  auto const logger = rclcpp::get_logger("target_detect_move_group");
 
-    auto executor = rclcpp::executors::SingleThreadedExecutor();
-    executor.add_node(node);
+  auto executor = rclcpp::executors::SingleThreadedExecutor();
+  executor.add_node(node);
 
-    using::moveit::planning_interface::MoveGroupInterface;
-    auto move_group_interface = MoveGroupInterface(node,"arm5dof");
+  using ::moveit::planning_interface::MoveGroupInterface;
+  auto move_group_interface = MoveGroupInterface(node, "arm5dof");
 
-    auto const target_pose = [](){
-        geometry_msgs::msg::Pose pose;
-        pose.orientation.w = 1.0;
-        pose.position.x = 0.28;
-        pose.position.y = 0.4;
-        pose.position.z = 0.5;
-        return pose;
-    }();
+  auto const red_target_pose = [&]() {
+    geometry_msgs::msg::Pose pose;
+    pose.orientation.w = 1.0;
+    pose.position.x = node->getRedTarget().point.x;
+    pose.position.y = node->getRedTarget().point.y;
+    pose.position.z = node->getRedTarget().point.z;
+    return pose;
+  }();
 
-    move_group_interface.setPoseTarget(target_pose);
+  auto const blue_target_pose = [&]() {
+    geometry_msgs::msg::Pose pose;
+    pose.orientation.w = 1.0;
+    pose.position.x = node->getBlueTarget().point.x;
+    pose.position.y = node->getBlueTarget().point.y;
+    pose.position.z = node->getBlueTarget().point.z;
+    return pose;
+  }();
 
-    auto const[success,plan] = [&move_group_interface](){
-        MoveGroupInterface::Plan msg;
-        auto const ok = static_cast<bool>(move_group_interface.plan(msg));
-        return std::make_pair(ok,msg);
-    }();
+  auto const green_target_pose = [&]() {
+    geometry_msgs::msg::Pose pose;
+    pose.orientation.w = 1.0;
+    pose.position.x = node->getGreenTarget().point.x;
+    pose.position.y = node->getGreenTarget().point.y;
+    pose.position.z = node->getGreenTarget().point.z;
+    return pose;
+  }();
 
-    if(success){
-       move_group_interface.execute(plan);
-    }
-    else{
-        RCLCPP_ERROR(logger,"planning failed!");
-    }
-    // if(!success){
-    //     RCLCPP_ERROR(logger,"planning failed!");
-    // }
+  move_group_interface.setPoseTarget(red_target_pose);
 
-    rclcpp::shutdown();
-    return 0;
+  auto const [success, plan] = [&move_group_interface]() {
+    MoveGroupInterface::Plan msg;
+    auto const ok = static_cast<bool>(move_group_interface.plan(msg));
+    return std::make_pair(ok, msg);
+  }();
+
+  if (success) {
+    move_group_interface.execute(plan);
+  } else {
+    RCLCPP_ERROR(logger, "planning failed!");
+  }
+  // if(!success){
+  //     RCLCPP_ERROR(logger,"planning failed!");
+  // }
+
+  rclcpp::shutdown();
+  return 0;
 }

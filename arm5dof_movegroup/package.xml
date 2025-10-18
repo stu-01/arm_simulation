@@ -10,24 +10,18 @@
   <!-- 仅 ament_cmake 属于 buildtool_depend -->
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <!-- 其余都属于 build_depend -->
-  <build_depend>rclcpp</build_depend>
-  <build_depend>rclcpp_action</build_depend>
-  <build_depend>moveit_ros_planning_interface</build_depend>
-  <build_depend>moveit_visual_tools</build_depend>
-  <build_depend>OpenCV</build_depend>
+  <!-- 其余都属于 depend -->
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
+  <depend>moveit_ros_planning_interface</depend>
+  <depend>moveit_visual_tools</depend>
+  <!-- <depend>OpenCV</depend> -->
   <depend>arm5dof_target_detect</depend>
-  <build_depend>geometry_msgs</build_depend>
-  <build_depend>cv_bridge</build_depend>
+  <depend>geometry_msgs</depend>
+  <depend>cv_bridge</depend>
 
-  
-
-  <!-- 运行时依赖 -->
-  <exec_depend>rclcpp</exec_depend>
-  <exec_depend>rclcpp_action</exec_depend>
-  <exec_depend>moveit_ros_planning_interface</exec_depend>
-  <exec_depend>moveit_visual_tools</exec_depend>
-  <exec_depend>OpenCV</exec_depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

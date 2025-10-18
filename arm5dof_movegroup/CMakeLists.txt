@@ -33,6 +33,7 @@ ament_target_dependencies(color_node
   moveit_visual_tools
   rclcpp_action
   arm5dof_target_detect
+  OpenCV
   geometry_msgs
   cv_bridge
 )
@@ -44,6 +45,7 @@ ament_target_dependencies(move_group
   moveit_visual_tools
   rclcpp_action
   arm5dof_target_detect
+  OpenCV
   geometry_msgs
   cv_bridge
 )

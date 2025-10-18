@@ -13,17 +13,9 @@
 
 using namespace std::chrono_literals;
 
-// 定义HSV颜色范围的结构体
-struct ColorRange {
-  cv::Scalar lower;
-  cv::Scalar upper;
-  std::string name;
-  cv::Scalar drawColor; // 绘制时用的BGR颜色
-};
-
 // 获取对应颜色的掩膜并绘制轮廓和标签
-cv::Point detectColor(const cv::Mat &hsv, cv::Mat &output,
-                      const ColorRange &colorRange);
+cv::Point detectColor(cv::Mat &output,
+                      const cv::Mat mask,cv::Scalar drawColor,std::string name);
 
 float get_depth(cv::Point centroid,cv::Mat &latest_depth_image_);
 
@@ -37,16 +29,13 @@ private:
   rclcpp::TimerBase::SharedPtr timer_;
 
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscriber_;
-  cv::Point centroid_out_red1;
-  cv::Point centroid_out_red2;
+  cv::Point centroid_out_red;
   cv::Point centroid_out_blue;
   cv::Point centroid_out_green;
-  float depth_red1;
-  float depth_red2;
+  float depth_red;
   float depth_blue;
   float depth_green;
-  geometry_msgs::msg::PointStamped final_position_red1;
-  geometry_msgs::msg::PointStamped final_position_red2;
+  geometry_msgs::msg::PointStamped final_position_red;
   geometry_msgs::msg::PointStamped final_position_blue;
   geometry_msgs::msg::PointStamped final_position_green;
 
