@@ -1,13 +1,16 @@
 #include "../include/arm5dof_mtc/mtc.hpp"
 
-
+// 构造函数，用初始化列表创建节点
 MTCTaskNode::MTCTaskNode(const rclcpp::NodeOptions &options)
     : node_{std::make_shared<rclcpp::Node>("mtc_node", options)} {}
 
-rclcpp::node_interfaces::NodeBaseInterface::SharedPtr MTCTaskNode::getNodeBaseInterface() {
+// 返回节点的基础接口指针
+rclcpp::node_interfaces::NodeBaseInterface::SharedPtr
+MTCTaskNode::getNodeBaseInterface() {
   return node_->get_node_base_interface();
 }
 
+// 创建规划场景，添加碰撞物体
 void MTCTaskNode::setupPlanningScene() {
   moveit_msgs::msg::CollisionObject object;
   object.id = "object";
@@ -26,6 +29,7 @@ void MTCTaskNode::setupPlanningScene() {
   psi.applyCollisionObject(object);
 }
 
+// 执行任务
 void MTCTaskNode::doTask() {
   task_ = createTask();
 
@@ -51,6 +55,7 @@ void MTCTaskNode::doTask() {
   return;
 }
 
+// 创建任务
 mtc::Task MTCTaskNode::createTask() {
   mtc::Task task;
   task.stages()->setName("demo task");
@@ -58,12 +63,12 @@ mtc::Task MTCTaskNode::createTask() {
 
   const auto &arm_group_name = "arm";
   const auto &hand_group_name = "hand";
-  const auto &hand_frame = "panda_hand";
+  // const auto &hand_frame = "panda_hand";
 
   // Set task properties
   task.setProperty("group", arm_group_name);
   task.setProperty("eef", hand_group_name);
-  task.setProperty("ik_frame", hand_frame);
+  // task.setProperty("ik_frame", hand_frame);
 
 // Disable warnings for this line, as it's a variable that's set but not used in
 // 暂时禁用特别的编译器警告，允许错误的写法存在
@@ -71,9 +76,10 @@ mtc::Task MTCTaskNode::createTask() {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 
-  mtc::Stage *current_state_ptr = nullptr; // Forward current_state on to grasp pose generator
+  mtc::Stage *current_state_ptr =
+      nullptr; // Forward current_state on to grasp pose generator
 
-  #pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 
   auto stage_state_current =
       std::make_unique<mtc::stages::CurrentState>("current");

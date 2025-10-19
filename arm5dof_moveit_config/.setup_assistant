@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: arm5dof_description
+    relative_path: urdf/arm5dof.urdf.xacro
+  srdf:
+    relative_path: config/arm5dof.srdf
+  package_settings:
+    author_name: zc
+    author_email: 2188755469@qq.com
+    generated_timestamp: 1760866187

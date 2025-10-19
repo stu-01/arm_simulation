@@ -15,7 +15,7 @@ find_package(moveit_core REQUIRED)
 find_package(moveit_ros_planning REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 
-add_executable(arm5dof_mtc src/mtc.cpp)
+add_executable(arm5dof_mtc src/mtc.cpp src/main.cpp)
 
 ament_target_dependencies(arm5dof_mtc
   ament_cmake
