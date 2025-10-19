@@ -12,6 +12,7 @@ MTCTaskNode::getNodeBaseInterface() {
 
 // 创建规划场景，添加碰撞物体
 void MTCTaskNode::setupPlanningScene() {
+  // 创建一条消息，表示一条碰撞物体，再由规划场景接口添加到规划场景中
   moveit_msgs::msg::CollisionObject object;
   object.id = "object";
   object.header.frame_id = "world";
@@ -25,6 +26,7 @@ void MTCTaskNode::setupPlanningScene() {
   pose.orientation.w = 1.0;
   object.pose = pose;
 
+  // 将碰撞物体添加到规划场景中
   moveit::planning_interface::PlanningSceneInterface psi;
   psi.applyCollisionObject(object);
 }
@@ -46,6 +48,7 @@ void MTCTaskNode::doTask() {
   }
   task_.introspection().publishSolution(*task_.solutions().front());
 
+  // 执行任务
   auto result = task_.execute(*task_.solutions().front());
   if (result.val != moveit_msgs::msg::MoveItErrorCodes::SUCCESS) {
     RCLCPP_ERROR_STREAM(LOGGER, "Task execution failed");
@@ -61,18 +64,17 @@ mtc::Task MTCTaskNode::createTask() {
   task.stages()->setName("demo task");
   task.loadRobotModel(node_);
 
+  // 给规划组的名字设置成变量，方便调用
   const auto &arm_group_name = "arm";
   const auto &hand_group_name = "hand";
-  // const auto &hand_frame = "panda_hand";
+  const auto &hand_frame = "arm_hand";
 
-  // Set task properties
+  // 设置任务属性，规划组，末端执行器，逆运动学
   task.setProperty("group", arm_group_name);
   task.setProperty("eef", hand_group_name);
-  // task.setProperty("ik_frame", hand_frame);
+  task.setProperty("ik_frame", hand_frame);
 
-// Disable warnings for this line, as it's a variable that's set but not used in
 // 暂时禁用特别的编译器警告，允许错误的写法存在
-// this example
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 
@@ -81,21 +83,27 @@ mtc::Task MTCTaskNode::createTask() {
 
 #pragma GCC diagnostic pop
 
+// 添加当前阶段状态
   auto stage_state_current =
       std::make_unique<mtc::stages::CurrentState>("current");
   current_state_ptr = stage_state_current.get();
   task.add(std::move(stage_state_current));
 
+  // 规划器设置
   auto sampling_planner =
       std::make_shared<mtc::solvers::PipelinePlanner>(node_);
+  
+  // 关节插值规划器设置
   auto interpolation_planner =
       std::make_shared<mtc::solvers::JointInterpolationPlanner>();
 
+  // 笛卡尔路径规划器设置
   auto cartesian_planner = std::make_shared<mtc::solvers::CartesianPath>();
   cartesian_planner->setMaxVelocityScalingFactor(1.0);
   cartesian_planner->setMaxAccelerationScalingFactor(1.0);
   cartesian_planner->setStepSize(.01);
 
+  // 添加移动到预抓取位置
   auto stage_open_hand =
       std::make_unique<mtc::stages::MoveTo>("open hand", interpolation_planner);
   stage_open_hand->setGroup(hand_group_name);

@@ -16,7 +16,7 @@ find_package(moveit_ros_planning_interface REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-install(DIRECTORY urdf rviz meshes
+install(DIRECTORY urdf rviz meshes launch
   DESTINATION share/${PROJECT_NAME}/
 )
 
