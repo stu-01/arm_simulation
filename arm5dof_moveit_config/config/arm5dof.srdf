@@ -44,7 +44,6 @@
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="base_link" link2="link1" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="link3" reason="Never"/>
-    <disable_collisions link1="base_link" link2="tool_center_frame" reason="Never"/>
     <disable_collisions link1="camera" link2="left_gripper_link" reason="Never"/>
     <disable_collisions link1="camera" link2="left_rubber_pad_link" reason="Never"/>
     <disable_collisions link1="camera" link2="link1" reason="Never"/>
@@ -76,6 +75,7 @@
     <disable_collisions link1="link1" link2="link3" reason="Never"/>
     <disable_collisions link1="link1" link2="link4" reason="Never"/>
     <disable_collisions link1="link1" link2="link5" reason="Never"/>
+    <disable_collisions link1="link1" link2="right_gripper_link" reason="Never"/>
     <disable_collisions link1="link1" link2="right_rubber_pad_link" reason="Never"/>
     <disable_collisions link1="link1" link2="tool_center_frame" reason="Never"/>
     <disable_collisions link1="link2" link2="link3" reason="Adjacent"/>

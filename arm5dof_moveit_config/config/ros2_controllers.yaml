@@ -8,7 +8,7 @@ controller_manager:
 
 
     hand_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
+      type: position_controllers/GripperActionController
 
 
     arm_hand_controller:
@@ -32,12 +32,7 @@ arm_controller:
       []
 hand_controller:
   ros__parameters:
-    joints:
-      - left_gripper_joint
-    command_interfaces:
-      []
-    state_interfaces:
-      []
+    joint: left_gripper_joint
 arm_hand_controller:
   ros__parameters:
     joints:
