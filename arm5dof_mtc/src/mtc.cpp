@@ -18,44 +18,18 @@ void MTCTaskNode::setupPlanningScene() {
   object.header.frame_id = "world";
   object.primitives.resize(1);
   object.primitives[0].type = shape_msgs::msg::SolidPrimitive::CYLINDER;
-  object.primitives[0].dimensions = {0.1, 0.02};
+  object.primitives[0].dimensions = {0.2, 0.02};
 
   geometry_msgs::msg::Pose pose;
-  pose.position.x = 0.5;
-  pose.position.y = -0.25;
+  pose.position.x = 0.3;
+  pose.position.y = 0.0;
+  pose.position.z = 0.1;
   pose.orientation.w = 1.0;
   object.pose = pose;
 
   // 将碰撞物体添加到规划场景中
   moveit::planning_interface::PlanningSceneInterface psi;
   psi.applyCollisionObject(object);
-}
-
-// 执行任务
-void MTCTaskNode::doTask() {
-  task_ = createTask();
-
-  try {
-    task_.init();
-  } catch (mtc::InitStageException &e) {
-    RCLCPP_ERROR_STREAM(LOGGER, e);
-    return;
-  }
-
-  if (!task_.plan(5)) {
-    RCLCPP_ERROR_STREAM(LOGGER, "Task planning failed");
-    return;
-  }
-  task_.introspection().publishSolution(*task_.solutions().front());
-
-  // 执行任务
-  auto result = task_.execute(*task_.solutions().front());
-  if (result.val != moveit_msgs::msg::MoveItErrorCodes::SUCCESS) {
-    RCLCPP_ERROR_STREAM(LOGGER, "Task execution failed");
-    return;
-  }
-
-  return;
 }
 
 // 创建任务
@@ -67,12 +41,12 @@ mtc::Task MTCTaskNode::createTask() {
   // 给规划组的名字设置成变量，方便调用
   const auto &arm_group_name = "arm";
   const auto &hand_group_name = "hand";
-  // const auto &hand_frame = "arm_hand";
+  const auto &hand_frame = "tool_center_frame";
 
   // 设置任务属性，规划组，末端执行器，逆运动学
   task.setProperty("group", arm_group_name);
   task.setProperty("eef", hand_group_name);
-  // task.setProperty("ik_frame", hand_frame);
+  task.setProperty("ik_frame", hand_frame);
 
 // 暂时禁用特别的编译器警告，允许错误的写法存在
 #pragma GCC diagnostic push
@@ -111,4 +85,31 @@ mtc::Task MTCTaskNode::createTask() {
   task.add(std::move(stage_open_hand));
 
   return task;
+}
+
+// 执行任务
+void MTCTaskNode::doTask() {
+  task_ = createTask();
+
+  try {
+    task_.init();
+  } catch (mtc::InitStageException &e) {
+    RCLCPP_ERROR_STREAM(LOGGER, e);
+    return;
+  }
+
+  if (!task_.plan(5)) {
+    RCLCPP_ERROR_STREAM(LOGGER, "Task planning failed");
+    return;
+  }
+  task_.introspection().publishSolution(*task_.solutions().front());
+
+  // 执行任务
+  auto result = task_.execute(*task_.solutions().front());
+  if (result.val != moveit_msgs::msg::MoveItErrorCodes::SUCCESS) {
+    RCLCPP_ERROR_STREAM(LOGGER, "Task execution failed");
+    return;
+  }
+
+  return;
 }

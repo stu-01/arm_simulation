@@ -17,9 +17,9 @@ public:
 
   rclcpp::node_interfaces::NodeBaseInterface::SharedPtr getNodeBaseInterface();
 
-  void doTask();
-
   void setupPlanningScene();
+
+  void doTask();
 
 private:
   // Compose an MTC task from a series of stages.

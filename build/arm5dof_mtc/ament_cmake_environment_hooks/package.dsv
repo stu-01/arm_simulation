@@ -1,0 +1,4 @@
+source;share/arm5dof_mtc/local_setup.bash
+source;share/arm5dof_mtc/local_setup.dsv
+source;share/arm5dof_mtc/local_setup.sh
+source;share/arm5dof_mtc/local_setup.zsh

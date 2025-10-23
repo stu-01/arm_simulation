@@ -1,0 +1,4 @@
+source;share/arm5dof_movegroup/local_setup.bash
+source;share/arm5dof_movegroup/local_setup.dsv
+source;share/arm5dof_movegroup/local_setup.sh
+source;share/arm5dof_movegroup/local_setup.zsh

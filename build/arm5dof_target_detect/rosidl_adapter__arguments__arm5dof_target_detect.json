@@ -1,0 +1,6 @@
+{
+  "package_name": "arm5dof_target_detect",
+  "non_idl_tuples": [
+    "/home/zc/code/ws_arm5dof/src/arm5dof_target_detect:msg/TargetDetect.msg"
+  ]
+}

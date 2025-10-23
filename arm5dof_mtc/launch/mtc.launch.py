@@ -48,21 +48,26 @@ def generate_launch_description():
         "capabilities": "move_group/ExecuteTaskSolutionCapability"
     }
 
+    moveit = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(
+                    get_package_share_directory(description_package),'launch','demo.launch.py'
+                )]), launch_arguments={'use_sim_time': 'true'}.items()
+    )
         # RViz
-    rviz_config_file = (
-        get_package_share_directory("arm5dof_mtc") + "/launch/mtc.rviz"
-    )
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file],
-        parameters=[
-            moveit_config.robot_description,
-            moveit_config.robot_description_semantic,
-            moveit_config.robot_description_kinematics,
-        ],
-    )
+    # rviz_config_file = (
+    #     get_package_share_directory("arm5dof_mtc") + "/launch/mtc.rviz"
+    # )
+    # rviz_node = Node(
+    #     package="rviz2",
+    #     executable="rviz2",
+    #     output="log",
+    #     arguments=["-d", rviz_config_file],
+    #     parameters=[
+    #         moveit_config.robot_description,
+    #         moveit_config.robot_description_semantic,
+    #         moveit_config.robot_description_kinematics,
+    #     ],
+    # )
 
 
     robot_description = {"robot_description": robot_description_content}
@@ -125,15 +130,16 @@ def generate_launch_description():
     
     return LaunchDescription(
         [
-            rviz_node,
-            static_tf,
+            moveit,
+            # rviz_node,
+            # static_tf,
             # robot_state_publisher,
-            robot_state_publisher_node,
+            # robot_state_publisher_node,
             run_move_group_node,
-            ros2_control_node,
-            joint_state_broadcaster,
-            arm_controller,
-            hand_controller,
+            # ros2_control_node,
+            # joint_state_broadcaster,
+            # arm_controller,
+            # hand_controller,
             # arm_hand_controller,
         ]
     )
