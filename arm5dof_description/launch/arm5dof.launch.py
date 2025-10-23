@@ -1,18 +1,16 @@
-import os
-
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
-
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
-
 def generate_launch_description():
+    # 定义函数
     declared_arguments = []
 
+# 设置参数，声明描述文件所在的包
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_package",
@@ -21,6 +19,7 @@ def generate_launch_description():
         is not set, it enables use of a custom description.",
         )
     )
+#设置参数，证明描述文件的名称 
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_file",
@@ -29,18 +28,10 @@ def generate_launch_description():
         )
     )
 
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "gui",
-            default_value="true",
-            description="Start Rviz2 and Joint State Publisher gui automatically \
-        with this launch file.",
-        )
-    )
-
+# 把参数赋值给变量
     description_package = LaunchConfiguration("description_package")
     description_file = LaunchConfiguration("description_file")
-    gui = LaunchConfiguration("gui")
+    # gui = LaunchConfiguration("gui")
 # xacro描述
     robot_description_content = Command(
         [
@@ -51,12 +42,6 @@ def generate_launch_description():
             ),
         ]
     )
-
-# urdf描述
-    # robot_description_content = PathJoinSubstitution(
-    #     [FindPackageShare(description_package), "urdf ", description_file]
-    # )
-
 
     robot_description = {"robot_description": robot_description_content}
 
@@ -74,24 +59,10 @@ def generate_launch_description():
         output="both",
         parameters=[robot_description],
     )
-    joint_state_publisher_node = Node(
-        package="joint_state_publisher_gui",
-        executable="joint_state_publisher_gui",
-        condition=IfCondition(gui),
-    )
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        condition=IfCondition(gui),
-    )
 
     nodes = [
         static_tf,
-        joint_state_publisher_node,
         robot_state_publisher_node,
-        rviz_node,
     ]
 
     # Launch!

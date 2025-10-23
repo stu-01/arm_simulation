@@ -67,12 +67,12 @@ mtc::Task MTCTaskNode::createTask() {
   // 给规划组的名字设置成变量，方便调用
   const auto &arm_group_name = "arm";
   const auto &hand_group_name = "hand";
-  const auto &hand_frame = "arm_hand";
+  // const auto &hand_frame = "arm_hand";
 
   // 设置任务属性，规划组，末端执行器，逆运动学
   task.setProperty("group", arm_group_name);
   task.setProperty("eef", hand_group_name);
-  task.setProperty("ik_frame", hand_frame);
+  // task.setProperty("ik_frame", hand_frame);
 
 // 暂时禁用特别的编译器警告，允许错误的写法存在
 #pragma GCC diagnostic push
