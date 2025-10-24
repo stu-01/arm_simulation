@@ -1,3 +1,0 @@
-geometry_msgs/PointStamped final_position_red
-geometry_msgs/PointStamped final_position_blue
-geometry_msgs/PointStamped final_position_green

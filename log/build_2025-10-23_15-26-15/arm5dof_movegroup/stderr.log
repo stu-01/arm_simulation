@@ -1,7 +1,0 @@
-[01m[K/home/zc/code/ws_arm5dof/src/arm5dof_movegroup/src/move_group_main.cpp:[m[K In function ‘[01m[Kint main(int, char**)[m[K’:
-[01m[K/home/zc/code/ws_arm5dof/src/arm5dof_movegroup/src/move_group_main.cpp:26:14:[m[K [01;35m[Kwarning: [m[Kvariable ‘[01m[Kblue_target_pose[m[K’ set but not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-but-set-variable-Wunused-but-set-variable]8;;[m[K]
-   26 |   auto const [01;35m[Kblue_target_pose[m[K = [&]() {
-      |              [01;35m[K^~~~~~~~~~~~~~~~[m[K
-[01m[K/home/zc/code/ws_arm5dof/src/arm5dof_movegroup/src/move_group_main.cpp:35:14:[m[K [01;35m[Kwarning: [m[Kvariable ‘[01m[Kgreen_target_pose[m[K’ set but not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-but-set-variable-Wunused-but-set-variable]8;;[m[K]
-   35 |   auto const [01;35m[Kgreen_target_pose[m[K = [&]() {
-      |              [01;35m[K^~~~~~~~~~~~~~~~~[m[K

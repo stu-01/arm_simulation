@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<robot name="arm5dof" xmlns:xacro="http://www.ros.org/wiki/xacro">
-
-    <xacro:include filename="arm5dof.urdf.xacro" />
-    <xacro:include filename="../plugin/gazebo_depth_camera.xacro" />
-
-        <xacro:gazebo_depth_camera 
-            topic_prefix="arm_camera" 
-            frame_name="camera" />

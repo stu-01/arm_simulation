@@ -1,4 +1,0 @@
-source;share/arm5dof_target_detect/local_setup.bash
-source;share/arm5dof_target_detect/local_setup.dsv
-source;share/arm5dof_target_detect/local_setup.sh
-source;share/arm5dof_target_detect/local_setup.zsh

@@ -80,11 +80,11 @@
     </collision>
   </link>
   <joint name="joint2" type="revolute">
-    <origin xyz="0 0 0.018" rpy="-1.5708 0 0" />
+    <origin xyz="0 0 0.018" rpy="-1.5708 -1.57 0" />
     <parent link="link1" />
     <child link="link2" />
     <axis xyz="0 0 1" />
-    <limit lower="-2.650" upper="-0.2269" effort="20" velocity="3.5" />
+    <limit lower="-1.57" upper="1.57" effort="20" velocity="3.5" />
     <ros2_control>
       <hardware_interface>
         position_controllers/JointPositionController

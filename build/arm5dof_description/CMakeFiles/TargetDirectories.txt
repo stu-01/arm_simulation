@@ -1,9 +1,0 @@
-/home/zc/code/ws_arm5dof/src/build/arm5dof_description/CMakeFiles/uninstall.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_description/CMakeFiles/arm5dof_description_uninstall.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_description/CMakeFiles/test.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_description/CMakeFiles/edit_cache.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_description/CMakeFiles/rebuild_cache.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_description/CMakeFiles/list_install_components.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_description/CMakeFiles/install.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_description/CMakeFiles/install/local.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_description/CMakeFiles/install/strip.dir

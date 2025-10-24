@@ -1,9 +1,0 @@
-/home/zc/code/ws_arm5dof/src/build/arm5dof_moveit_config/CMakeFiles/uninstall.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_moveit_config/CMakeFiles/arm5dof_moveit_config_uninstall.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_moveit_config/CMakeFiles/test.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_moveit_config/CMakeFiles/edit_cache.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_moveit_config/CMakeFiles/rebuild_cache.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_moveit_config/CMakeFiles/list_install_components.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_moveit_config/CMakeFiles/install.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_moveit_config/CMakeFiles/install/local.dir
-/home/zc/code/ws_arm5dof/src/build/arm5dof_moveit_config/CMakeFiles/install/strip.dir

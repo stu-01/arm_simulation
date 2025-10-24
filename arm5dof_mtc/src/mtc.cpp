@@ -37,13 +37,13 @@ mtc::Task MTCTaskNode::createTask() {
   mtc::Task task;
   task.stages()->setName("demo task");
   task.loadRobotModel(node_);
-
+// 以下六行都是在设置任务的属性
   // 给规划组的名字设置成变量，方便调用
   const auto &arm_group_name = "arm";
   const auto &hand_group_name = "hand";
   const auto &hand_frame = "tool_center_frame";
 
-  // 设置任务属性，规划组，末端执行器，逆运动学
+  // 设置任务属性，包括规划组，末端执行器，逆运动学
   task.setProperty("group", arm_group_name);
   task.setProperty("eef", hand_group_name);
   task.setProperty("ik_frame", hand_frame);
@@ -63,10 +63,10 @@ mtc::Task MTCTaskNode::createTask() {
   current_state_ptr = stage_state_current.get();
   task.add(std::move(stage_state_current));
 
+  // 下面是三个规划器选项
   // 规划器设置
   auto sampling_planner =
       std::make_shared<mtc::solvers::PipelinePlanner>(node_);
-  
   // 关节插值规划器设置
   auto interpolation_planner =
       std::make_shared<mtc::solvers::JointInterpolationPlanner>();
@@ -83,6 +83,49 @@ mtc::Task MTCTaskNode::createTask() {
   stage_open_hand->setGroup(hand_group_name);
   stage_open_hand->setGoal("open");
   task.add(std::move(stage_open_hand));
+
+
+      // clang-format off
+  //     auto stage =
+  //         std::make_unique<mtc::stages::ModifyPlanningScene>("forbid collision (hand,object)");
+  //     stage->allowCollisions("object",
+  //                            task.getRobotModel()
+  //                                ->getJointModelGroup(hand_group_name)
+  //                                ->getLinkModelNamesWithCollisionGeometry(),
+  //                            false);
+  //     // clang-format on
+  //     place->insert(std::move(stage));
+  //   }
+
+  //   {
+  //     auto stage = std::make_unique<mtc::stages::ModifyPlanningScene>("detach object");
+  //     stage->detachObject("object", hand_frame);
+  //     place->insert(std::move(stage));
+  //   }
+
+  //   {
+  //     auto stage = std::make_unique<mtc::stages::MoveRelative>("retreat", cartesian_planner);
+  //     stage->properties().configureInitFrom(mtc::Stage::PARENT, { "group" });
+  //     stage->setMinMaxDistance(0.1, 0.3);
+  //     stage->setIKFrame(hand_frame);
+  //     stage->properties().set("marker_ns", "retreat");
+
+  //     // Set retreat direction
+  //     geometry_msgs::msg::Vector3Stamped vec;
+  //     vec.header.frame_id = "world";
+  //     vec.vector.x = -0.5;
+  //     stage->setDirection(vec);
+  //     place->insert(std::move(stage));
+  //   }
+  //   task.add(std::move(place));
+  // }
+
+  // {
+  //   auto stage = std::make_unique<mtc::stages::MoveTo>("return home", interpolation_planner);
+  //   stage->properties().configureInitFrom(mtc::Stage::PARENT, { "group" });
+  //   stage->setGoal("ready");
+  //   task.add(std::move(stage));
+  // }
 
   return task;
 }

@@ -4,33 +4,23 @@ moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControll
 
 moveit_simple_controller_manager:
   controller_names:
-    - arm_controller
-    - hand_controller
-    # - arm_hand_controller
+  - arm_controller
+  - hand_controller
 
   arm_controller:
     type: FollowJointTrajectory
     joints:
-      - joint1
-      - joint2
-      - joint3
-      - joint4
-      - joint5
+    - joint1
+    - joint2
+    - joint3
+    - joint4
+    - joint5
     action_ns: /arm_controller/follow_joint_trajectory
     default: true
   hand_controller:
     # type: GripperCommand
-    type:  FollowJointTrajectory
+    type: FollowJointTrajectory
     joints:
-      - left_gripper_joint
+    - left_gripper_joint
     action_ns: /hand_controller/follow_joint_trajectory
     default: true
-  # arm_hand_controller:
-  #   type: FollowJointTrajectory
-  #   joints:
-  #     - joint1
-  #     - joint2
-  #     - joint3
-  #     - joint4
-  #     - joint5
-  #     - left_gripper_joint
