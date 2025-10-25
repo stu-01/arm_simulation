@@ -10,8 +10,10 @@ from launch.actions import DeclareLaunchArgument, RegisterEventHandler
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
-
 from launch_ros.substitutions import FindPackageShare
+
+# 加载了两次move_group节点，大概会出错
+
 def generate_launch_description():
     robot_name = "arm5dof"
     description_package='arm5dof_moveit_config'

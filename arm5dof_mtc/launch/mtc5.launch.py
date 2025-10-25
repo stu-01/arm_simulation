@@ -12,6 +12,10 @@ from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
 
 from launch_ros.substitutions import FindPackageShare
+
+# 修改为原来的写法，避免了因为有“/”程序无法运行的问题
+# 但是扔然采用顺序执行，还是会因为节点无法在进程中退出而堵塞
+
 def generate_launch_description():
     robot_name = "arm5dof"
     description_package='arm5dof_moveit_config'

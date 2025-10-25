@@ -1,14 +1,16 @@
 import os
 from ament_index_python.packages import get_package_share_directory
-from launch.actions import ExecuteProcess
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, RegisterEventHandler
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 from moveit_configs_utils import MoveItConfigsBuilder
 from launch_ros.actions import Node
 from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
+
+# 删去了一个启动move_group的启动方式
+# 采用了先退出节点再执行下一个的顺序执行，但是部分节点在整个进程中都不会退出，所以这个方法也是错误的
+# 有“/”不能在描述路径中使用，程序运行失败，还没有改
 
 def generate_launch_description():
     robot_name = "arm5dof"

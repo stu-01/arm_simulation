@@ -24,7 +24,10 @@
         <joint name="joint5" value="1.4441"/>
     </group_state>
     <group_state name="open" group="hand">
-        <joint name="left_gripper_joint" value="0.2"/>
+        <joint name="left_gripper_joint" value="1.3"/>
+    </group_state>
+     <group_state name="close" group="hand">
+        <joint name="left_gripper_joint" value="0.0"/>
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="hand" parent_link="link5" group="hand"/>

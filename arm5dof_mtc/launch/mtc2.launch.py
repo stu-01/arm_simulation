@@ -10,6 +10,9 @@ from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
 
+# 在3的基础上更改了rviz文件的路径，但应该是没有效果
+# 有“/”不能在描述路径中使用，程序运行失败，还没有改
+
 def generate_launch_description():
     robot_name = "arm5dof"
     description_package='arm5dof_moveit_config'
