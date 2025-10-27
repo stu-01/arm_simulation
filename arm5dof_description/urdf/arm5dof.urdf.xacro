@@ -50,7 +50,7 @@
     <parent link="base_link" />
     <child link="link1" />
     <axis xyz="0 0 1" />
-    <limit lower="-1.5708" upper="1.5708" effort="20" velocity="3.5" />
+    <limit lower="-2.23" upper="2.23" effort="20" velocity="3.5" />
     <ros2_control>
       <hardware_interface>
         position_controllers/JointPositionController
@@ -118,7 +118,7 @@
     <parent link="link2" />
     <child link="link3" />
     <axis xyz="0 0 1" />
-    <limit lower="-1.5708" upper="1.5708" effort="20" velocity="3.5" />
+    <limit lower="-2.55" upper="2.55" effort="20" velocity="3.5" />
     <ros2_control>
       <hardware_interface>
         position_controllers/JointPositionController
@@ -152,7 +152,7 @@
     <parent link="link3" />
     <child link="link4" />
     <axis xyz="0 0 1" />
-    <limit lower="-1.5708" upper="1.5708" effort="20" velocity="3.5" />
+    <limit lower="-1.92" upper="2.55" effort="20" velocity="3.5" />
     <ros2_control>
       <hardware_interface>
         position_controllers/JointPositionController
@@ -186,7 +186,7 @@
     <parent link="link4" />
     <child link="link5" />
     <axis xyz="0 0 1" />
-    <limit lower="-1.5708" upper="1.5708" effort="20" velocity="3.5" />
+    <limit lower="-3.14" upper="3.14" effort="20" velocity="3.5" />
     <ros2_control>
       <hardware_interface>
         position_controllers/JointPositionController
@@ -220,7 +220,7 @@
     <parent link="link5" />
     <child link="left_gripper_link" />
     <axis xyz="0 0 1" />
-    <limit lower="0" upper="1.5708" effort="20" velocity="3.5" />
+    <limit lower="0" upper="2.0" effort="20" velocity="3.5" />
     <ros2_control>
       <hardware_interface>
         position_controllers/JointPositionController
@@ -290,8 +290,12 @@
     <parent link="link5" />
     <child link="right_gripper_link" />
     <axis xyz="0 0 1" />
-    <limit lower="-1.5708" upper="0" effort="20" velocity="3.5" />
-    <mimic joint="left_gripper_joint" multiplier="-1" offset="0" />
+    <limit lower="-2.0" upper="0" effort="20" velocity="3.5" />
+    <ros2_control>
+      <hardware_interface>
+        position_controllers/JointPositionController
+      </hardware_interface>
+    </ros2_control>
   </joint>
   <link name="right_rubber_pad_link">
     <inertial>
@@ -385,11 +389,60 @@
     <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.1" />
   </joint>
 
-  <!--添加世界坐标系到机械臂基坐标系的空间变换-->
+  <link name="body">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.023734" />
+    </inertial>
+    <visual>
+      <origin xyz="-0.07 0 0.025" rpy="0 0 0" />
+      <geometry>
+        <box size="0.27 0.12 0.05"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0.2 0.2 0.2 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.1 0 0.025" rpy="0 0 0" />
+      <geometry>
+        <box size="0.3 0.2 0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="body_left">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.023734" />
+    </inertial>
+    <visual>
+      <origin xyz="-0.07 0 0.025" rpy="0 0 0" />
+      <geometry>
+        <box size="0.27 0.12 0.05"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0.2 0.2 0.2 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.1 0 0.025" rpy="0 0 0" />
+      <geometry>
+        <box size="0.3 0.2 0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="body_joint" type="fixed">
+    <parent link="body" />
+    <child link="base_link" />
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.05" />
+  </joint>
+
   <link name="world" />
   <joint name="world_joint" type="fixed">
     <parent link="world" />
-    <child link="base_link" />
+    <child link="body" />
     <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
   </joint>
 

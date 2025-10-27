@@ -18,18 +18,35 @@ void MTCTaskNode::setupPlanningScene() {
   object.header.frame_id = "world";
   object.primitives.resize(1);
   object.primitives[0].type = shape_msgs::msg::SolidPrimitive::CYLINDER;
-  object.primitives[0].dimensions = {0.2, 0.02};
+  object.primitives[0].dimensions = {0.1, 0.02};
 
   geometry_msgs::msg::Pose pose;
-  pose.position.x = 0.3;
+  pose.position.x = 0.4;
   pose.position.y = 0.0;
-  pose.position.z = 0.1;
+  pose.position.z = 0.15;
   pose.orientation.w = 1.0;
   object.pose = pose;
 
   // 将碰撞物体添加到规划场景中
   moveit::planning_interface::PlanningSceneInterface psi;
   psi.applyCollisionObject(object);
+
+  moveit_msgs::msg::CollisionObject base;
+  base.id = "base";
+  base.header.frame_id = "world";
+  base.primitives.resize(1);
+  base.primitives[0].type = shape_msgs::msg::SolidPrimitive::BOX;
+  base.primitives[0].dimensions = {0.2, 0.2,0.1};
+
+  geometry_msgs::msg::Pose base_pose;
+  pose.position.x = 0.4;
+  pose.position.y = 0.0;
+  pose.position.z = 0.05;
+  pose.orientation.w = 1.0;
+  base.pose = pose;
+
+  // 将碰撞物体添加到规划场景中
+  psi.applyCollisionObject(base);
 }
 
 // 创建任务
@@ -108,9 +125,9 @@ mtc::Task MTCTaskNode::createTask() {
       stage->properties().set("marker_ns", "approach_object");
       stage->properties().set("link", hand_frame);
       stage->properties().configureInitFrom(mtc::Stage::PARENT, {"group"});
-      stage->setMinMaxDistance(0.1, 0.15);
+      stage->setMinMaxDistance(0.05, 2.0);
 
-      // 设置手部方向
+      // 设置手部方向,用一个三维向量描述运动方向
       geometry_msgs::msg::Vector3Stamped vec;
       vec.header.frame_id = hand_frame;
       vec.vector.z = 1.0;
@@ -141,7 +158,7 @@ mtc::Task MTCTaskNode::createTask() {
       auto wrapper = std::make_unique<mtc::stages::ComputeIK>("grasp pose IK",
                                                               std::move(stage));
       wrapper->setMaxIKSolutions(20);
-      wrapper->setMinSolutionDistance(1.0);
+      wrapper->setMinSolutionDistance(0.5);
       wrapper->setIKFrame(grasp_frame_transform, hand_frame);
       wrapper->properties().configureInitFrom(mtc::Stage::PARENT,
                                               {"eef", "group"});
@@ -185,15 +202,14 @@ mtc::Task MTCTaskNode::createTask() {
       auto stage = std::make_unique<mtc::stages::MoveRelative>(
           "lift object", cartesian_planner);
       stage->properties().configureInitFrom(mtc::Stage::PARENT, {"group"});
-      stage->setMinMaxDistance(0.1, 0.5);
+      stage->setMinMaxDistance(0.05, 2.0);
       stage->setIKFrame(hand_frame);
       stage->properties().set("marker_ns", "lift_object");
 
       // 设置向上平移方向
       geometry_msgs::msg::Vector3Stamped vec;
       vec.header.frame_id = "world";
-      vec.vector.x = -0.2;
-      vec.vector.z = 0.5;
+      vec.vector.z = 1.0;
       stage->setDirection(vec);
       grasp->insert(std::move(stage));
     }
@@ -240,7 +256,7 @@ mtc::Task MTCTaskNode::createTask() {
       auto wrapper = std::make_unique<mtc::stages::ComputeIK>("place pose IK",
                                                               std::move(stage));
       wrapper->setMaxIKSolutions(20);
-      wrapper->setMinSolutionDistance(1.0);
+      wrapper->setMinSolutionDistance(0.5);
       wrapper->setIKFrame("object");
       wrapper->properties().configureInitFrom(mtc::Stage::PARENT,
                                               {"eef", "group"});
@@ -280,7 +296,7 @@ mtc::Task MTCTaskNode::createTask() {
       auto stage = std::make_unique<mtc::stages::MoveRelative>(
           "retreat", cartesian_planner);
       stage->properties().configureInitFrom(mtc::Stage::PARENT, {"group"});
-      stage->setMinMaxDistance(0.1, 0.3);
+      stage->setMinMaxDistance(0.05, 2.0);
       stage->setIKFrame(hand_frame);
       stage->properties().set("marker_ns", "retreat");
 
