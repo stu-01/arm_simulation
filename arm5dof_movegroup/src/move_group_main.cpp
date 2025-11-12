@@ -23,23 +23,23 @@ int main(int argc, char **argv) {
     return pose;
   }();
 
-  auto const blue_target_pose = [&]() {
-    geometry_msgs::msg::Pose pose;
-    pose.orientation.w = 1.0;
-    pose.position.x = node->getBlueTarget().point.x;
-    pose.position.y = node->getBlueTarget().point.y;
-    pose.position.z = node->getBlueTarget().point.z;
-    return pose;
-  }();
+  // auto const blue_target_pose = [&]() {
+  //   geometry_msgs::msg::Pose pose;
+  //   pose.orientation.w = 1.0;
+  //   pose.position.x = node->getBlueTarget().point.x;
+  //   pose.position.y = node->getBlueTarget().point.y;
+  //   pose.position.z = node->getBlueTarget().point.z;
+  //   return pose;
+  // }();
 
-  auto const green_target_pose = [&]() {
-    geometry_msgs::msg::Pose pose;
-    pose.orientation.w = 1.0;
-    pose.position.x = node->getGreenTarget().point.x;
-    pose.position.y = node->getGreenTarget().point.y;
-    pose.position.z = node->getGreenTarget().point.z;
-    return pose;
-  }();
+  // auto const green_target_pose = [&]() {
+  //   geometry_msgs::msg::Pose pose;
+  //   pose.orientation.w = 1.0;
+  //   pose.position.x = node->getGreenTarget().point.x;
+  //   pose.position.y = node->getGreenTarget().point.y;
+  //   pose.position.z = node->getGreenTarget().point.z;
+  //   return pose;
+  // }();
 
   move_group_interface.setPoseTarget(red_target_pose);
 

@@ -15,7 +15,10 @@ find_package(moveit_core REQUIRED)
 find_package(moveit_ros_planning REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 
-add_executable(arm5dof_mtc src/mtc.cpp src/main.cpp)
+include_directories(include)
+
+add_executable(arm5dof_mtc src/mtc0.cpp src/main.cpp)
+# add_executable(arm5dof_mtc1 src/mtc1.cpp src/main.cpp)
 
 ament_target_dependencies(arm5dof_mtc
   ament_cmake
@@ -26,6 +29,15 @@ ament_target_dependencies(arm5dof_mtc
   moveit_ros_planning_interface
 )
 
+# ament_target_dependencies(arm5dof_mtc1
+#   ament_cmake
+#   moveit_task_constructor_core
+#   rclcpp
+#   moveit_core
+#   moveit_ros_planning
+#   moveit_ros_planning_interface
+# )
+
 target_include_directories(arm5dof_mtc PRIVATE
   include
   # 确保包含 MoveIt 的头文件路径
@@ -33,12 +45,24 @@ target_include_directories(arm5dof_mtc PRIVATE
   ${moveit_ros_planning_interface_INCLUDE_DIRS}
 )
 
+# target_include_directories(arm5dof_mtc1 PRIVATE
+#   include
+#   # 确保包含 MoveIt 的头文件路径
+#   ${moveit_core_INCLUDE_DIRS}
+#   ${moveit_ros_planning_interface_INCLUDE_DIRS}
+# )
+
 install(TARGETS
   arm5dof_mtc
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(DIRECTORY launch
+# install(TARGETS
+#   arm5dof_mtc1
+#   DESTINATION lib/${PROJECT_NAME}
+# )
+
+install(DIRECTORY launch rviz
   DESTINATION share/${PROJECT_NAME}/
 )
 if(BUILD_TESTING)

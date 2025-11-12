@@ -1,4 +1,4 @@
-#include "../include/arm5dof_mtc/mtc.hpp"
+#include "arm5dof_mtc/mtc.hpp"
 
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
